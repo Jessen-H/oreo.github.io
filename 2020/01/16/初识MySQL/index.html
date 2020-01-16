@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://www.huangjiusheng.top').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="MySQL的安装与卸载  MySQL无论无论是卸载还是安装，完成后必须重新启动计算机 MySQL的默认端口号为3306 当计算机有多个版本MySQL同时存在，可以设置不同的端口号，默认端口号不要随意更改 检查MySQL安装成功的唯一标准：此电脑——&gt;右键管理——&gt;服务——&gt;MySQL——&gt;重启动 卸载MySQL时不能使用Windows的程序与功能，使用mysql-insta">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识MySQL">
+<meta property="og:url" content="https://www.huangjiusheng.top/2020/01/16/%E5%88%9D%E8%AF%86MySQL/index.html">
+<meta property="og:site_name" content="黄久盛的blog">
+<meta property="og:description" content="MySQL的安装与卸载  MySQL无论无论是卸载还是安装，完成后必须重新启动计算机 MySQL的默认端口号为3306 当计算机有多个版本MySQL同时存在，可以设置不同的端口号，默认端口号不要随意更改 检查MySQL安装成功的唯一标准：此电脑——&gt;右键管理——&gt;服务——&gt;MySQL——&gt;重启动 卸载MySQL时不能使用Windows的程序与功能，使用mysql-insta">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-01-16T03:18:22.000Z">
+<meta property="article:modified_time" content="2020-01-16T03:19:56.772Z">
+<meta property="article:author" content="Jessen Huang">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://www.huangjiusheng.top/2020/01/16/%E5%88%9D%E8%AF%86MySQL/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>初识MySQL | 黄久盛的blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄久盛的blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-something">
+
+    <a href="/something/" rel="section"><i class="fa fa-fw fa-something"></i>其他</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.huangjiusheng.top/2020/01/16/%E5%88%9D%E8%AF%86MySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jessen Huang">
+      <meta itemprop="description" content="历遍山河 觉得人间值得">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄久盛的blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          初识MySQL
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-16 11:18:22 / 修改时间：11:19:56" itemprop="dateCreated datePublished" datetime="2020-01-16T11:18:22+08:00">2020-01-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="MySQL的安装与卸载"><a href="#MySQL的安装与卸载" class="headerlink" title="MySQL的安装与卸载"></a>MySQL的安装与卸载</h2><blockquote>
+<ul>
+<li>MySQL无论无论是卸载还是安装，完成后必须重新启动计算机</li>
+<li>MySQL的默认端口号为3306</li>
+<li>当计算机有多个版本MySQL同时存在，可以设置不同的端口号，默认端口号不要随意更改</li>
+<li>检查MySQL安装成功的唯一标准：<br>此电脑——&gt;右键管理——&gt;服务——&gt;MySQL——&gt;重启动</li>
+<li>卸载MySQL时不能使用Windows的程序与功能，使用mysql-installer-community.msi</li>
+<li>如何配置MySQL<br>此电脑——&gt;右键属性——&gt;高级——&gt;环境变量——&gt;系统变量——&gt;Path——&gt;编辑</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="Mysql中的约束"><a href="#Mysql中的约束" class="headerlink" title="Mysql中的约束"></a>Mysql中的约束</h2><p>mysql数据库管理系统提供了一系列机制来检查数据库表中的数据是否满足规定的条件，以保证数据库表中数据的准确性和一致性，这种机制就是 <strong>约束</strong>。<br>###MySQL中的六大约束：</p>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NOT NULL</td>
+<td>约束字段的值不能为空</td>
+</tr>
+<tr>
+<td>DEFAULT</td>
+<td>设置字段的默认值</td>
+</tr>
+<tr>
+<td>UNIQUE KEY(UK)</td>
+<td>约束字段的值是唯一</td>
+</tr>
+<tr>
+<td>PRIMARY KEY(PK)</td>
+<td>约束字段为表的主键，可以作为该表记录的唯一标识</td>
+</tr>
+<tr>
+<td>AUTO_INCREMENT</td>
+<td>约束字段的值为自动增长</td>
+</tr>
+<tr>
+<td>FOREIGN KEY(FK)</td>
+<td>约束字段为表的外键</td>
+</tr>
+</tbody></table>
+<blockquote>
+<ul>
+<li>非空：在我们新增数据的时候 这个字段必须新增的同时有值；</li>
+<li>默认：在你没有给定值得时候 数据库默认的值</li>
+<li>唯一：唯一是指一个字段中所有的值不能重复</li>
+<li>主键：通过主键一定能找到唯一的一条记录（主键包含非空且唯一这两种约束）</li>
+<li>自动增长： 主键数字自动往上递增1；<br>自动增长约束必须是主键而且数据类型是int；自动增长的数字不会回退</li>
+<li>外键约束：子表的取值范围受父表约束；<br>先建父表，再建子表，先有父表数据，再有子表数据</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="使用命令提示符管理数据库"><a href="#使用命令提示符管理数据库" class="headerlink" title="使用命令提示符管理数据库"></a>使用命令提示符管理数据库</h2><p>实际开发过程中，都使用SQL命令来完成大部分的工作；数据库管理系统提供许多功能，可以通过SQL（结构化查询语句）来定义和操作数据库；维护数据库的完整性和安全性。<br><strong>所有mysql命令都需要有命令结束标识符</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql -h localhost -P 3306 -u root -p</span><br><span class="line">mysql -h 127.0.0.1 -P 3306 -u root -p</span><br></pre></td></tr></table></figure>
+
+<p>###1.使用命令建库建表</p>
+<blockquote>
+<ul>
+<li>查看命令：SHOW DATABASES;</li>
+<li>建立数据库命令：CREATE DATABASE database_name;</li>
+<li>操作数据库命令：USE database_name;</li>
+<li>删除数据库命令：DROP DATABASE database_name;</li>
+<li><em>不要把系统数据库删除！！！*</em></li>
+</ul>
+</blockquote>
+<p>###2.使用SQL对数据表操作<br>新建数据表的语法是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE t_name(</span><br><span class="line">属性名 数据类型 [约束],</span><br><span class="line">属性名 数据类型 [约束],</span><br><span class="line">......</span><br><span class="line">属性名 数据类型 [约束]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>其他一些命令<br>| 命令             | 说明           |<br>| —————- | ————– |<br>| SHOW TABLES;     | 查看数据库     |<br>| DESC table_name; | 查看数据表结构 |<br>| DROP table_name; | 删除数据表     |</p>
+<p>练习</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">create table commoditytype(</span><br><span class="line">ct_id int(11) primary key,</span><br><span class="line">ct_name varchar(50) not null</span><br><span class="line">)default charset&#x3D;utf8;</span><br><span class="line"></span><br><span class="line">create table commodity(</span><br><span class="line">c_id int(11) primary key,</span><br><span class="line">c_namme varchar(50) not null,</span><br><span class="line">c_madein varchar(50) not null,</span><br><span class="line">c_type int(11) not null,</span><br><span class="line">c_inprice int(11) not null,</span><br><span class="line">c_outprice int(11),</span><br><span class="line">c_num int(11) default&#39;100&#39;,</span><br><span class="line">constraint fk_1 foreign key(c_type) references commoditytype (ct_id)</span><br><span class="line">)default charset&#x3D;utf8;</span><br><span class="line"></span><br><span class="line">create table customer(</span><br><span class="line">cu_id int(11) primary key,</span><br><span class="line">cu_name varchar(50) not null,</span><br><span class="line">cu_phone varchar(50) not null,</span><br><span class="line">cu_gender int(11) not null default &#39;1&#39;,</span><br><span class="line">cu_address varchar(100) not null</span><br><span class="line">)default charset&#x3D;utf8;</span><br><span class="line"></span><br><span class="line">create table &#96;order&#96;(</span><br><span class="line">o_id int(11) primary key,</span><br><span class="line">o_cuid int(11) not null,</span><br><span class="line">o_cid int(11) not null,</span><br><span class="line">o_num int(11) not null,</span><br><span class="line">constraint fk_2 foreign key (o_cuid) references customer (cu_id),</span><br><span class="line">constraint fk_3 foreign key (o_cid) references commodity (c_id)</span><br><span class="line">)default charset&#x3D;utf8;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创分享，您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Jessen Huang 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Jessen Huang 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/16/MySQL%E7%9A%84%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD/" rel="next" title="MySQL的其他功能">
+      MySQL的其他功能 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL的安装与卸载"><span class="nav-number">1.</span> <span class="nav-text">MySQL的安装与卸载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql中的约束"><span class="nav-number">2.</span> <span class="nav-text">Mysql中的约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用命令提示符管理数据库"><span class="nav-number">3.</span> <span class="nav-text">使用命令提示符管理数据库</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jessen Huang</p>
+  <div class="site-description" itemprop="description">历遍山河 觉得人间值得</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jessen Huang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
